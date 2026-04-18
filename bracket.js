@@ -50,6 +50,7 @@ const CONFIG = {
 // ╚══════════════════════════════════════════════════════════════════╝
 
 const RESULTS = {
+	"GS-D1-M1": "Satwik",
   // --- GROUP STAGE EXAMPLES ---
   // "GS-D1-M1": "Aayush",
 
