@@ -71,7 +71,7 @@ const RESULTS = {
 	"W-F-M1": "Satwik",
 	"L-F-M1": "Dev",
 	"GF": "Dev",
-	"RESET": { triggered: true, winner: "TBD" },
+	"RESET": { triggered: true, winner: "Dev" },
   // --- GROUP STAGE EXAMPLES ---
   // "GS-D1-M1": "Aayush",
 
