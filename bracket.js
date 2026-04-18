@@ -17,6 +17,8 @@ const CONFIG = {
     "Manas",
     "Satwik"
   ],
+  
+  championImage: "https://i.ibb.co/5WRr4BM3/Gemini-Generated-Image-czvhdlczvhdlczvh.png",
 
   // ── STREAM — YouTube embed URL (leave empty for placeholder) ──
   streamUrl: "https://www.youtube.com/embed/UdlnZZZHVVk",
