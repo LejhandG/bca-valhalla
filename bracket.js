@@ -19,7 +19,7 @@ const CONFIG = {
   ],
 
   // ── STREAM — YouTube embed URL (leave empty for placeholder) ──
-  streamUrl: "",
+  streamUrl: "https://www.youtube.com/embed/UdlnZZZHVVk",
 
   // ── BRAWLHALLA MAPS — used for arena rotation display ──
   maps: {
