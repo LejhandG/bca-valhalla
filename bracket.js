@@ -66,7 +66,7 @@ const RESULTS = {
 	"GS-D5-M2": "Dev",
 	"GS-D5-M3": "Kunal",
 	"W-R1-M1": "Dev",
-	
+	"W-R1-M2": "Satwik",
   // --- GROUP STAGE EXAMPLES ---
   // "GS-D1-M1": "Aayush",
 
