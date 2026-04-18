@@ -15,8 +15,7 @@ const CONFIG = {
     "Dev",
     "Kunal",
     "Manas",
-    "Satwik",
-    "Urmi"
+    "Satwik"
   ],
 
   // ── STREAM — YouTube embed URL (leave empty for placeholder) ──
