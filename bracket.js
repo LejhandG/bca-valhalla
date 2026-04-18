@@ -51,6 +51,7 @@ const CONFIG = {
 
 const RESULTS = {
 	"GS-D1-M1": "Satwik",
+	"GS-D1-M2": "Atharva",
   // --- GROUP STAGE EXAMPLES ---
   // "GS-D1-M1": "Aayush",
 
