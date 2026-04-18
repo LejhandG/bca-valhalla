@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BCA Valhalla — Webhook Control Panel</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .webhook-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .channel-section {
+      margin-bottom: 32px;
+    }
+
+    .channel-section .card {
+      transition: border-color 0.3s;
+    }
+
+    .channel-section .card:hover {
+      border-color: var(--purple);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-family: 'Share Tech Mono';
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: 3px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 10px rgba(155, 89, 230, 0.15);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Bebas Neue';
+      font-size: 16px;
+      letter-spacing: 3px;
+      padding: 10px 24px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--white);
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      border-color: var(--purple);
+      box-shadow: 0 0 12px rgba(155, 89, 230, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      border-color: var(--purple);
+      color: #fff;
+    }
+
+    .btn-send:hover {
+      box-shadow: 0 0 16px rgba(155, 89, 230, 0.4);
+    }
+
+    .btn-template {
+      font-size: 13px;
+      padding: 6px 14px;
+      font-family: 'Share Tech Mono';
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .btn-template:hover {
+      color: var(--white);
+    }
+
+    .status-msg {
+      font-family: 'Share Tech Mono';
+      font-size: 11px;
+      letter-spacing: 1px;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 3px;
+      display: none;
+    }
+
+    .status-msg.success {
+      display: block;
+      color: var(--green);
+      background: rgba(0, 232, 143, 0.06);
+      border: 1px solid rgba(0, 232, 143, 0.2);
+    }
+
+    .status-msg.error {
+      display: block;
+      color: var(--red);
+      background: rgba(255, 62, 94, 0.06);
+      border: 1px solid rgba(255, 62, 94, 0.2);
+    }
+
+    .nav-link {
+      display: inline-block;
+      font-family: 'Share Tech Mono';
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--purple);
+      text-decoration: none;
+      padding: 6px 14px;
+      border: 1px solid var(--purple);
+      border-radius: 3px;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+
+    .nav-link:hover {
+      background: rgba(155, 89, 230, 0.1);
+      box-shadow: 0 0 10px rgba(155, 89, 230, 0.15);
+    }
+
+    .preview-box {
+      background: #2f3136;
+      border-left: 4px solid var(--purple);
+      border-radius: 4px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #dcddde;
+      font-family: 'Rajdhani', sans-serif;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .preview-box .embed-title {
+      font-weight: 700;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .preview-box .embed-field {
+      margin-top: 6px;
+      padding: 4px 0;
+    }
+
+    .preview-box .embed-field-name {
+      font-weight: 700;
+      color: #fff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <div class="page-content">
+    <header class="site-header" style="padding:40px 20px 30px;">
+      <div class="tag-line">BCA VALHALLA &nbsp;·&nbsp; WEBHOOK CONTROL PANEL</div>
+      <h1 class="title" style="font-size:52px;">WEBHOOK PANEL</h1>
+      <p class="subtitle">Post to Discord Channels</p>
+    </header>
+
+    <div class="webhook-container">
+      <a href="index.html" class="nav-link">← BACK TO TOURNAMENT</a>
+
+      <div id="channels-container">
+        <!-- Generated by JS -->
+      </div>
+    </div>
+
+    <footer style="margin-top:40px;">
+      <div class="footer-title" style="font-size:24px;">BCA VALHALLA</div>
+      <p>WEBHOOK CONTROL PANEL &nbsp;·&nbsp; DISCORD INTEGRATION</p>
+    </footer>
+  </div>
+
+  <script>
+    // ═══ CHANNELS CONFIG ═══
+    const CHANNELS = [
+      { id: 'info-and-rules', label: 'INFO & RULES', icon: '📜', color: 'var(--blue)', desc: 'Post tournament rules and info' },
+      { id: 'bracket', label: 'BRACKET', icon: '⚔️', color: 'var(--purple)', desc: 'Post bracket updates' },
+      { id: 'general-banter', label: 'GENERAL BANTER', icon: '💬', color: 'var(--green)', desc: 'Post general messages' },
+      { id: 'results', label: 'RESULTS', icon: '🏆', color: 'var(--gold)', desc: 'Post match results' },
+    ];
+
+    // ═══ TEMPLATES ═══
+    const TEMPLATES = {
+      'info-and-rules': {
+        title: 'BCA VALHALLA — Tournament Rules',
+        description: '**Format:** League + Top 4 Playoffs\n**Judge:** Dhruv\n**Maps:** Brawlhalla Official Maps\n\n**Rules:**\n1. Group Stage (The Gauntlet): Everyone plays everyone else exactly once.\n2. Win matches to climb the Leaderboard.\n3. The Top 4 players advance to the Double Elimination Playoffs.\n4. Grand Final decides the ultimate Champion.\n5. All rulings by Judge Dhruv are final.',
+        color: 3447003,
+      },
+      'bracket': {
+        title: 'BCA VALHALLA — Bracket Update',
+        description: '**Current bracket status:**\n\nCheck the tournament page for the live bracket!\n\n[Tournament Page Link]',
+        color: 10181046,
+      },
+      'general-banter': {
+        title: 'BCA VALHALLA',
+        description: 'Message here...',
+        color: 3066993,
+      },
+      'results': {
+        title: 'Match Result',
+        description: '**Round:** [Round Name]\n**Winner:** [Player Name]\n**Loser:** [Player Name]\n\n**Score:** 2-1',
+        color: 15844367,
+      },
+    };
+
+    // ═══ RENDER CHANNELS ═══
+    const container = document.getElementById('channels-container');
+    let allHTML = '';
+
+    CHANNELS.forEach(ch => {
+      const savedUrl = localStorage.getItem('webhook_' + ch.id) || '';
+      const template = TEMPLATES[ch.id];
+      const descForTextarea = template.description.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const descForPreview = template.description
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+      const titleSafe = template.title.replace(/"/g, '&quot;');
+
+      allHTML += `
+    <div class="channel-section" id="section-${ch.id}">
+      <div class="section-head" style="margin-bottom:16px;">
+        <span class="section-num" style="font-size:36px;color:${ch.color}">${ch.icon}</span>
+        <span class="section-title" style="font-size:20px;">${ch.label}</span>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon" style="background:${ch.color};box-shadow:0 0 8px ${ch.color}"></div>
+          <h2>${ch.desc.toUpperCase()}</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Webhook URL</label>
+            <input type="text" class="form-input" id="url-${ch.id}" value="${savedUrl}" placeholder="https://discord.com/api/webhooks/..." oninput="saveUrl('${ch.id}')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Embed Title</label>
+            <input type="text" class="form-input" id="title-${ch.id}" value="${titleSafe}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message Content (Discord Markdown)</label>
+            <textarea class="form-textarea" id="msg-${ch.id}" oninput="updatePreview('${ch.id}')">${descForTextarea}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preview</label>
+            <div class="preview-box" id="preview-${ch.id}">
+              <div class="embed-title">${template.title}</div>
+              <div>${descForPreview}</div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-send" onclick="sendWebhook('${ch.id}', ${template.color})">SEND MESSAGE</button>
+            <button class="btn btn-template" onclick="loadTemplate('${ch.id}')">RESET TEMPLATE</button>
+          </div>
+          <div class="status-msg" id="status-${ch.id}"></div>
+        </div>
+      </div>
+    </div>`;
+    });
+
+    container.innerHTML = allHTML;
+
+    // ═══ FUNCTIONS ═══
+    function saveUrl(id) {
+      const url = document.getElementById('url-' + id).value;
+      localStorage.setItem('webhook_' + id, url);
+    }
+
+    function updatePreview(id) {
+      const title = document.getElementById('title-' + id).value;
+      const msg = document.getElementById('msg-' + id).value;
+      const preview = document.getElementById('preview-' + id);
+      const htmlContent = msg
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+      preview.innerHTML = '<div class="embed-title">' + title + '</div><div>' + htmlContent + '</div>';
+    }
+
+    function loadTemplate(id) {
+      const t = TEMPLATES[id];
+      document.getElementById('title-' + id).value = t.title;
+      document.getElementById('msg-' + id).value = t.description;
+      updatePreview(id);
+    }
+
+    function showStatus(id, msg, type) {
+      const el = document.getElementById('status-' + id);
+      el.textContent = msg;
+      el.className = 'status-msg ' + type;
+      setTimeout(function () { el.style.display = 'none'; el.className = 'status-msg'; }, 5000);
+    }
+
+    async function sendWebhook(id, embedColor) {
+      const url = document.getElementById('url-' + id).value.trim();
+      const title = document.getElementById('title-' + id).value.trim();
+      const msg = document.getElementById('msg-' + id).value.trim();
+
+      if (!url) { showStatus(id, '✗ NO WEBHOOK URL SET', 'error'); return; }
+      if (!msg) { showStatus(id, '✗ MESSAGE IS EMPTY', 'error'); return; }
+
+      const payload = {
+        embeds: [{
+          title: title,
+          description: msg,
+          color: embedColor,
+          footer: { text: 'BCA VALHALLA — Brawlhalla Tournament' },
+          timestamp: new Date().toISOString(),
+        }]
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok || res.status === 204) {
+          showStatus(id, '✓ MESSAGE SENT SUCCESSFULLY', 'success');
+        } else {
+          const errText = await res.text();
+          showStatus(id, '✗ FAILED: ' + res.status + ' — ' + errText.substring(0, 100), 'error');
+        }
+      } catch (e) {
+        showStatus(id, '✗ ERROR: ' + e.message, 'error');
+      }
+    }
+
+    // ═══ PARTICLES (same as main page) ═══
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5, speedY: -(Math.random() * 0.3 + 0.1),
+        speedX: (Math.random() - 0.5) * 0.2, opacity: Math.random() * 0.4 + 0.1,
+        color: ['rgba(155,89,230,', 'rgba(0,168,255,', 'rgba(255,215,0,'][Math.floor(Math.random() * 3)],
+      };
+    }
+    for (let i = 0; i < 40; i++) particles.push(createParticle());
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(function (p) {
+        p.y += p.speedY; p.x += p.speedX;
+        if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+        ctx.fillStyle = p.color + p.opacity + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+
+</html>
